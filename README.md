@@ -8,7 +8,8 @@ Once Rust is installed:
 - clone this repo, if you don't have it on your local machine
 - open a terminal, and enter the repo directory
 - run `CARGO_INCREMENTAL="0" cargo build --release`
-- run `target/release/patterns`.
+- run `target/release/patterns words.txt`
+    - if you'd prefer to use a different input corpus, specify its full path.
 
 The number you see printed out is the number of "friendly" strings, i.e. those that have at least one matching pattern, according to the rules at https://mimi.io/en/challenge/
 

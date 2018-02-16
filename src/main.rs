@@ -10,6 +10,10 @@ use rayon::prelude::*;
 extern crate fnv;
 use fnv::FnvHashMap;
 
+#[macro_use]
+extern crate clap;
+use clap::{App, Arg};
+
 /// Attempt to open a file, read it, and parse it into a vec of Strings
 fn file_to_lines<P>(filename: P) -> Vec<String>
 where
@@ -75,7 +79,18 @@ fn count_frequency(patterns: Vec<Vec<u8>>) -> u32 {
 }
 
 fn main() {
-    let strings = file_to_lines("words.txt");
+    // Generate a CLI, and get input filename to process
+    let command_params = App::new("patterns")
+        .version(&crate_version!()[..])
+        .author("Stephan Hügel <urschrei@gmail.com>")
+        .about("Generate a frequency count of patterns derived from ASCII strings")
+        .arg(Arg::with_name("INPUT_STRINGS")
+        .help("A text file containing ASCII uppercase strings, one per line")
+        .index(1)
+        .required(true))
+        .get_matches();
+    let input_file = value_t!(command_params.value_of("INPUT_STRINGS"), String).unwrap();
+    let strings = file_to_lines(&input_file);
     // generate patterns for each string
     let patterns: Vec<_> = strings
         .par_iter()

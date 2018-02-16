@@ -1,13 +1,14 @@
 [package]
 name = "patterns"
 license = "MIT"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Stephan Hügel <urschrei@gmail.com>"]
 readme = "README.md"
 
 [dependencies]
 rayon = "1.0.0"
 fnv = "1.0.6"
+clap = "2.30.0"
 
 [[bin]]
 name = "patterns"
