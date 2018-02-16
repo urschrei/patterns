@@ -35,24 +35,21 @@ where
 // "ABAB" generates a pattern of 0101
 // "CDCD" generates a pattern of 0101
 fn generate_pattern(haystack: &str) -> Vec<u8> {
-    // we assume that no strings will be longer than 256 chars
-    let mut stack = String::with_capacity(256).to_owned();
-    let mut pattern = vec![];
+    // neither stack nor pattern will need to re-allocate
+    let mut stack = String::with_capacity(haystack.len()).to_owned();
+    let mut pattern = Vec::with_capacity(haystack.len());
     for character in haystack.chars() {
         // it's safe to use find here, since ASCII is one byte per character
-        let needle = stack.find(character);
-
         // if a match is found: push the index at which it was found onto the pattern
         // otherwise, push a new entry for that string onto the stack,
-        // and push the index onto the pattern.
+        // then push its index onto the pattern.
         // u8 is plenty, since there are only 26 letters in ASCII uppercase
         // it's still enough if we include 0-9, a-z, and punctuation
-        match needle {
-            Some(m) => pattern.push(m as u8),
-            None => {
-                stack.push_str(&character.to_string());
-                pattern.push((stack.len() - 1) as u8)
-            }
+        if let Some(needle) = stack.find(character) {
+            pattern.push(needle as u8)
+        } else {
+            stack.push_str(&character.to_string());
+            pattern.push((stack.len() - 1) as u8)
         }
     }
     pattern
