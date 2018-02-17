@@ -53,7 +53,7 @@ fn generate_pattern(haystack: &str) -> Vec<usize> {
     pattern
 }
 
-/// Perform a frequency count of 8-bit integer sequences
+/// Perform a frequency count of integer sequences
 fn count_frequency(patterns: Vec<Vec<usize>>) -> u32 {
     // Vec<usize> is hashable, so we can use a HashMap to carry out a frequency count
     // The Fowler-Noll-Vo hashing function is faster when hashing integer keys
