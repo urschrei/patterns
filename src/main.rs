@@ -28,7 +28,7 @@ where
 
 /// Generate patterns of 8-bit integers from uppercase ASCII strings
 // We do this by creating a "stack" of characters that we have seen:
-// Each time we encounter a new character, we push it onto the stack
+// Each time we encounter a new byte, we push it onto the stack
 // and increment our pattern with its 0-indexed position in the stack.
 // "AB" generates a pattern of 01
 // "CD" generates a pattern of 01
@@ -41,7 +41,7 @@ fn generate_pattern(haystack: &str) -> Vec<usize> {
     for byte in haystack.as_bytes() {
         // it's safe to use bytes here, since ASCII is one byte per character
         // if a match is found: push the index at which it was found onto the pattern
-        // otherwise, push a new entry for that string onto the stack,
+        // otherwise, push a new entry for that byte onto the stack,
         // then push its index onto the pattern.
         if let Some(needle) = stack.iter().position(|&elem| elem == byte) {
             pattern.push(needle)
@@ -79,10 +79,12 @@ fn main() {
         .version(&crate_version!()[..])
         .author("Stephan Hügel <urschrei@gmail.com>")
         .about("Generate a frequency count of patterns derived from ASCII strings")
-        .arg(Arg::with_name("INPUT_STRINGS")
-        .help("A text file containing ASCII uppercase strings, one per line")
-        .index(1)
-        .required(true))
+        .arg(
+            Arg::with_name("INPUT_STRINGS")
+                .help("A text file containing ASCII uppercase strings, one per line")
+                .index(1)
+                .required(true),
+        )
         .get_matches();
     let input_file = value_t!(command_params.value_of("INPUT_STRINGS"), String).unwrap();
     let strings = file_to_lines(&input_file);
