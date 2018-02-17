@@ -34,33 +34,31 @@ where
 // "CD" generates a pattern of 01
 // "ABAB" generates a pattern of 0101
 // "CDCD" generates a pattern of 0101
-fn generate_pattern(haystack: &str) -> Vec<u8> {
+fn generate_pattern(haystack: &str) -> Vec<usize> {
     // neither stack nor pattern will need to re-allocate
-    let mut stack = String::with_capacity(haystack.len()).to_owned();
+    let mut stack: Vec<&u8> = Vec::with_capacity(haystack.len());
     let mut pattern = Vec::with_capacity(haystack.len());
-    for character in haystack.chars() {
-        // it's safe to use find here, since ASCII is one byte per character
+    for byte in haystack.as_bytes() {
+        // it's safe to use bytes here, since ASCII is one byte per character
         // if a match is found: push the index at which it was found onto the pattern
         // otherwise, push a new entry for that string onto the stack,
         // then push its index onto the pattern.
-        // u8 is plenty, since there are only 26 letters in ASCII uppercase
-        // it's still enough if we include 0-9, a-z, and punctuation
-        if let Some(needle) = stack.find(character) {
-            pattern.push(needle as u8)
+        if let Some(needle) = stack.iter().position(|&elem| elem == byte) {
+            pattern.push(needle)
         } else {
-            stack.push_str(&character.to_string());
-            pattern.push((stack.len() - 1) as u8)
+            stack.push(byte);
+            pattern.push(stack.len() - 1);
         }
     }
     pattern
 }
 
 /// Perform a frequency count of 8-bit integer sequences
-fn count_frequency(patterns: Vec<Vec<u8>>) -> u32 {
-    // Vec<u8> is hashable, so we can use a HashMap to carry out a frequency count
+fn count_frequency(patterns: Vec<Vec<usize>>) -> u32 {
+    // Vec<usize> is hashable, so we can use a HashMap to carry out a frequency count
     // The Fowler-Noll-Vo hashing function is faster when hashing integer keys
     // and we aren't concerned with DoS attacks here
-    let mut frequency: FnvHashMap<Vec<u8>, u32> =
+    let mut frequency: FnvHashMap<Vec<usize>, u32> =
         FnvHashMap::with_capacity_and_hasher(patterns.len(), Default::default());
     // consume the input vector, populating the HashMap
     patterns
@@ -89,7 +87,7 @@ fn main() {
     let input_file = value_t!(command_params.value_of("INPUT_STRINGS"), String).unwrap();
     let strings = file_to_lines(&input_file);
     // generate patterns for each string
-    let patterns: Vec<_> = strings
+    let patterns = strings
         .par_iter()
         .map(|string| generate_pattern(string))
         .collect();
