@@ -67,9 +67,10 @@ fn count_frequency(patterns: Vec<Vec<usize>>) -> u32 {
     // retain value counts greater than 1, and sum them
     frequency
         .into_par_iter()
-        .filter(|&(_, value)| value > 1) // retain frequencies > 1
-        .map(|(_, value)| value) // only retain value counts
-        .sum() // and sum them
+        .filter(|&(_, v)| v > 1) // retain frequencies > 1
+        .fold(|| 0, |acc, hm| acc + hm.1) // retain only values
+        // .reduce(|| 0, |acc, to_add| acc + to_add) // this works in lieu of sum()
+        .sum() // total frequencies > 1
 }
 
 fn main() {
