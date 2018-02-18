@@ -38,9 +38,10 @@ fn generate_pattern(haystack: &str) -> Vec<u8> {
     // neither stack nor pattern will need to re-allocate
     let mut stack: Vec<&u8> = Vec::with_capacity(haystack.len());
     let mut pattern = Vec::with_capacity(haystack.len());
+    // it's safe to use bytes here, since ASCII is one byte per character
     for byte in haystack.as_bytes() {
-        // it's safe to use bytes here, since ASCII is one byte per character
-        // if a match is found: push the index at which it was found onto the pattern
+        // if a match is found in the stack:
+        // push the index at which it was found onto the pattern
         // otherwise, push a new entry for that byte onto the stack,
         // then push its index onto the pattern.
         // u8 is big enough to cover all of ASCII
