@@ -18,7 +18,7 @@ The `sha-256` hash of the text input file (`words.txt`, it's included in this re
 
 # Benchmarks
 The binary was compiled with link-time-optimisation.  
-On a 3.4 GHz Core i7, the optimised version runs in **200 ms**.  
+On a 3.4 GHz Core i7, the optimised version runs in **240 ms**.  
 
 Optimisation details:
 Wherever possible, operations are parallelised using the [Rayon](https://github.com/rayon-rs/rayon) library, and instead of the standard hash function, a hashing function based on the [Fowler-Noll-Vo](https://github.com/servo/rust-fnv) function is used. This is considerably faster than the default SipHash function for small integer keys, but is far less resistant to DoS attacks.  
