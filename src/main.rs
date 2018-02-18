@@ -26,7 +26,7 @@ where
         .collect()
 }
 
-/// Generate patterns of 8-bit integers from uppercase ASCII strings
+/// Generate patterns of integers from uppercase ASCII strings
 // We do this by creating a "stack" of characters that we have seen:
 // Each time we encounter a new byte, we push it onto the stack
 // and increment our pattern with its 0-indexed position in the stack.
@@ -34,7 +34,7 @@ where
 // "CD" generates a pattern of 01
 // "ABAB" generates a pattern of 0101
 // "CDCD" generates a pattern of 0101
-fn generate_pattern(haystack: &str) -> Vec<usize> {
+fn generate_pattern(haystack: &str) -> Vec<u8> {
     // neither stack nor pattern will need to re-allocate
     let mut stack: Vec<&u8> = Vec::with_capacity(haystack.len());
     let mut pattern = Vec::with_capacity(haystack.len());
@@ -43,22 +43,23 @@ fn generate_pattern(haystack: &str) -> Vec<usize> {
         // if a match is found: push the index at which it was found onto the pattern
         // otherwise, push a new entry for that byte onto the stack,
         // then push its index onto the pattern.
+        // u8 is big enough to cover all of ASCII
         if let Some(needle) = stack.iter().position(|&elem| elem == byte) {
-            pattern.push(needle)
+            pattern.push(needle as u8)
         } else {
             stack.push(byte);
-            pattern.push(stack.len() - 1);
+            pattern.push(stack.len() as u8 - 1);
         }
     }
     pattern
 }
 
 /// Perform a frequency count of integer sequences
-fn count_frequency(patterns: Vec<Vec<usize>>) -> u32 {
-    // Vec<usize> is hashable, so we can use a HashMap to carry out a frequency count
+fn count_frequency(patterns: Vec<Vec<u8>>) -> u32 {
+    // Vec<u8> is hashable, so we can use a HashMap to carry out a frequency count
     // The Fowler-Noll-Vo hashing function is faster when hashing integer keys
     // and we aren't concerned with DoS attacks here
-    let mut frequency: FnvHashMap<Vec<usize>, u32> =
+    let mut frequency: FnvHashMap<Vec<u8>, u32> =
         FnvHashMap::with_capacity_and_hasher(patterns.len(), Default::default());
     // consume the input vector, populating the HashMap
     patterns
