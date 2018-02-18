@@ -109,7 +109,7 @@ mod tests {
             .iter()
             .map(|string| generate_pattern(string))
             .collect();
-        let counts = count_frequency(patterns);
+        let counts = count_frequency(&patterns);
         assert_eq!(counts, 5);
     }
 }
