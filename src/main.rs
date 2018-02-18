@@ -55,15 +55,15 @@ fn generate_pattern(haystack: &str) -> Vec<u8> {
 }
 
 /// Perform a frequency count of integer sequences
-fn count_frequency(patterns: Vec<Vec<u8>>) -> u32 {
+fn count_frequency(patterns: &[Vec<u8>]) -> u32 {
     // Vec<u8> is hashable, so we can use a HashMap to carry out a frequency count
     // The Fowler-Noll-Vo hashing function is faster when hashing integer keys
     // resistance to DoS attacks isn't a priority here
-    let mut frequency: FnvHashMap<Vec<u8>, u32> =
+    let mut frequency: FnvHashMap<&[u8], u32> =
         FnvHashMap::with_capacity_and_hasher(patterns.len(), Default::default());
     // consume the input vector, populating the HashMap
     patterns
-        .into_iter()
+        .iter()
         .for_each(|pattern| *frequency.entry(pattern).or_insert(0) += 1);
     // retain value counts greater than 1, and sum them
     frequency
@@ -92,8 +92,8 @@ fn main() {
     let patterns = strings
         .par_iter()
         .map(|string| generate_pattern(string))
-        .collect();
-    let friendly = count_frequency(patterns);
+        .collect::<Vec<Vec<u8>>>();
+    let friendly = count_frequency(&patterns);
     println!("Number of friendly strings: {:?}", friendly);
 }
 
