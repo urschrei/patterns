@@ -70,7 +70,7 @@ fn count_frequency(patterns: &[Vec<u8>]) -> u32 {
     frequency
         .into_par_iter()
         .filter(|&(_, v)| v > 1) // retain frequencies > 1
-        .fold(|| 0, |acc, hm| acc + hm.1) // retain only values
+        .fold(|| 0, |acc, entry| acc + entry.1) // retain only values
         .sum() // total frequencies > 1
 }
 
