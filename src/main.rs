@@ -1,4 +1,6 @@
 // compile using CARGO_INCREMENTAL="0" cargo build --release
+extern crate fnv;
+
 extern crate rayon;
 use rayon::prelude::*;
 

@@ -3,9 +3,7 @@ use std::io::BufReader;
 use std::fs::File;
 use std::path::Path;
 
-extern crate fnv;
-use self::fnv::FnvHashMap;
-
+use fnv::FnvHashMap;
 use rayon::prelude::*;
 
 /// Attempt to open a file, read it, and parse it into a vec of Strings
