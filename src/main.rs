@@ -76,7 +76,7 @@ fn count_frequency(patterns: &[Vec<u8>]) -> u32 {
 
 fn main() {
     // Generate a CLI, and get input filename to process
-    let command_params = App::new("patterns")
+    let params = App::new("patterns")
         .version(&crate_version!()[..])
         .author("Stephan Hügel <urschrei@gmail.com>")
         .about("Generate a frequency count of patterns derived from ASCII strings")
@@ -87,7 +87,7 @@ fn main() {
                 .required(true),
         )
         .get_matches();
-    let input_file = value_t!(command_params.value_of("INPUT_STRINGS"), String).unwrap();
+    let input_file = value_t!(params.value_of("INPUT_STRINGS"), String).unwrap();
     let strings = file_to_lines(&input_file);
     // generate patterns for each string
     let patterns = strings
