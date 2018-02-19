@@ -22,9 +22,7 @@ On a 3.4 GHz Core i7, the optimised version runs in **240 ms**.
 
 Optimisation details:
 Wherever possible, operations are parallelised using the [Rayon](https://github.com/rayon-rs/rayon) library, and instead of the standard hash function, a hashing function based on the [Fowler-Noll-Vo](https://github.com/servo/rust-fnv) function is used. This is considerably faster than the default SipHash function for small integer keys, but is far less resistant to DoS attacks.  
-Total memory usage (heap and anonymous VM) on macOS is 6.03 MiB, with 2.75 KiB of heap allocation.
-
-The unoptimised version, which uses no parallelism and the standard hash function, runs in **750 ms**.
+Total memory usage (heap and anonymous VM) on macOS is ~6.03 MiB,
 
 # Licence
 The MIT license. See [licence.txt](licence.txt) for details.
