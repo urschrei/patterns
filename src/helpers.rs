@@ -23,6 +23,7 @@ where
 // "CD" generates a pattern of 01
 // "ABAB" generates a pattern of 0101
 // "CDCD" generates a pattern of 0101
+#[inline]
 pub fn generate_pattern(haystack: &str) -> Vec<u8> {
     let mut total = 0u8;
     let mut stack = [255u8; 128];
@@ -44,6 +45,7 @@ pub fn generate_pattern(haystack: &str) -> Vec<u8> {
 }
 
 /// Perform a frequency count of integer sequences
+#[inline]
 pub fn count_frequency(patterns: &[Vec<u8>]) -> u32 {
     // Vec<u8> is hashable, so we can use a HashMap to carry out a frequency count
     // The Fowler-Noll-Vo hashing function is faster when hashing integer keys
