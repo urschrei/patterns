@@ -25,23 +25,29 @@ where
 // "CDCD" generates a pattern of 0101
 #[inline]
 pub fn generate_pattern(haystack: &str) -> Vec<u8> {
+    // neither stack nor pattern will need to re-allocate
     let mut total = 0u8;
-    let mut stack = [255u8; 128];
-    haystack
-        .as_bytes()
-        .iter()
-        .cloned()
-        .map(|byte| {
-            let byte = byte & 0x7F;
-            let mut needle = stack[byte as usize];
-            if needle == 255 {
-                stack[byte as usize] = total;
-                needle = total;
-                total += 1;
-            }
-            needle
-        })
-        .collect()
+    // ASCII uppercase is decimal 65 - 90
+    // We could cope with extended ASCII by using 255
+    let mut stack = [0u8; 128];
+    let mut pattern = Vec::with_capacity(haystack.len());
+    // it's safe to use bytes here, since ASCII is one byte per character
+    for &byte in haystack.as_bytes() {
+        // casting u8 to usize casts from the byte to 0…127
+        // if needle has a "seen" value of 0:
+            // the total is bumped by 1, ensuring each new byte gets a higher number
+            // the new total is assigned to the stack at the byte position
+            // needle is set to total
+        // the ("seen" value - 1) is pushed onto the pattern
+        let mut needle = stack[byte as usize];
+        if needle == 0 {
+            total += 1;
+            stack[byte as usize] = total;
+            needle = total;
+        }
+        pattern.push(needle - 1)
+    }
+    pattern
 }
 
 /// Perform a frequency count of integer sequences
