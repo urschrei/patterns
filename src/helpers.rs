@@ -58,8 +58,8 @@ pub fn count_frequency(patterns: &[Vec<u8>]) -> u32 {
         .for_each(|pattern| *frequency.entry(pattern).or_insert(0) += 1);
     // retain value counts greater than 1, and sum them
     frequency
-        .into_par_iter()
-        .filter(|&(_, v)| v > 1) // retain frequencies > 1
+        .par_iter()
+        .filter(|&(_, &v)| v > 1) // retain frequencies > 1
         .fold(|| 0, |acc, entry| acc + entry.1) // retain only values
         .sum() // total frequencies > 1
 }
