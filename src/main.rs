@@ -1,4 +1,6 @@
 // compile using CARGO_INCREMENTAL="0" cargo build --release
+#![feature(test)]
+
 extern crate fnv;
 
 extern crate rayon;
@@ -37,6 +39,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
+    extern crate test;
     use super::*;
     #[test]
     fn test_count() {
@@ -49,5 +52,19 @@ mod tests {
             .collect();
         let counts = count_frequency(&patterns);
         assert_eq!(counts, 5);
+    }
+    #[bench]
+    fn bench_pattern(b: &mut test::Bencher) {
+        let string = "LALALAXOXOXO";
+        b.iter(|| generate_pattern(&string))
+    }
+    #[bench]
+    fn bench_counts(b: &mut test::Bencher) {
+        let v = vec![
+            vec![0, 0, 1, 0, 0],
+            vec![0, 0, 1, 0, 0, 0],
+            vec![0, 0, 1, 0, 0],
+        ];
+        b.iter(|| count_frequency(&v))
     }
 }
