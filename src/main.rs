@@ -1,13 +1,9 @@
 // compile using CARGO_INCREMENTAL="0" cargo build --release
-#![feature(test)]
-
-extern crate fnv;
-
 extern crate rayon;
 use rayon::prelude::*;
 
-mod helpers;
-use helpers::{count_frequency, file_to_lines, generate_pattern};
+extern crate patterns;
+use patterns::{count_frequency, file_to_lines, generate_pattern};
 
 #[macro_use]
 extern crate clap;
@@ -35,36 +31,4 @@ fn main() {
         .collect::<Vec<Vec<u8>>>();
     let friendly = count_frequency(&patterns);
     println!("Number of friendly strings: {:?}", friendly);
-}
-
-#[cfg(test)]
-mod tests {
-    extern crate test;
-    use super::*;
-    #[test]
-    fn test_count() {
-        let strings = vec![
-            "LALALA", "XOXOXO", "GCGCGC", "HHHCCC", "BBBMMM", "EGONUH", "HHRGOE"
-        ];
-        let patterns: Vec<_> = strings
-            .iter()
-            .map(|string| generate_pattern(string))
-            .collect();
-        let counts = count_frequency(&patterns);
-        assert_eq!(counts, 5);
-    }
-    #[bench]
-    fn bench_pattern(b: &mut test::Bencher) {
-        let string = "LALALAXOXOXO";
-        b.iter(|| generate_pattern(&string))
-    }
-    #[bench]
-    fn bench_counts(b: &mut test::Bencher) {
-        let v = vec![
-            vec![0, 0, 1, 0, 0],
-            vec![0, 0, 1, 0, 0, 0],
-            vec![0, 0, 1, 0, 0],
-        ];
-        b.iter(|| count_frequency(&v))
-    }
 }

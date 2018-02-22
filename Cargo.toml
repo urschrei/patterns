@@ -10,10 +10,13 @@ rayon = "1.0.0"
 fnv = "1.0.6"
 clap = "2.30.0"
 
+[lib]
+name = "patterns"
+path = "src/lib.rs"
+
 [[bin]]
 name = "patterns"
 path = "src/main.rs"
-crate-type = ["bin"]
 
 [profile.release]
 lto = true
