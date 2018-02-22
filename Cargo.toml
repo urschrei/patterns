@@ -13,10 +13,12 @@ clap = "2.30.0"
 [lib]
 name = "patterns"
 path = "src/lib.rs"
+doctest = false
 
 [[bin]]
 name = "patterns"
 path = "src/main.rs"
+test = false
 
 [profile.release]
 lto = true
