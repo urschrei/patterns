@@ -24,7 +24,9 @@ Optimisation details:
 Wherever possible, operations are parallelised using the [Rayon](https://github.com/rayon-rs/rayon) library, and instead of the standard hash function, a hashing function based on the [Fowler-Noll-Vo](https://github.com/servo/rust-fnv) function is used. This is considerably faster than the default SipHash function for small integer keys, but is far less resistant to DoS attacks.  
 Total memory usage (heap and anonymous VM) on macOS is ~6.03 MiB.
 
-## Time Complexity
+A [Python implementation](patterns.py) runs in around 6800 ms. The Rust implementation is thus ~33x faster.
+
+## Time Complexity of the Rust implementation
 `O(n)`. This is relatively easy to calculate, but we can verify it empirically. See the [notebook](stats.ipynb) for details.
 
 # Licence
