@@ -30,6 +30,7 @@ if __name__ == "__main__":
     with open("words.txt", 'r') as f:
         counts = Counter((generate_patterns(line) for line in f))
         friendly = sum(
-            {key: counts[key] for key in counts if counts[key] > 1}.values()
+            {pattern: count for pattern, count in counts.items() if count >
+             1}.values()
         )
     print("Number of friendly strings: %s" % friendly)
