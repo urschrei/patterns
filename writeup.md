@@ -2,15 +2,15 @@
 
 Recently, I came across an ad for an interesting dev job that had a precondition: it required you to first solve a programming challenge
 
-> Given a list of words, two "strings" (what even is a string, though?) are classified as "friendly" if there exists a one-to-one mapping between them. Thus, the strings `FOOFOOFOO` and `BAABAABAA` are considered friendly, because `F` and `B`, and `O` and `A` map to each other, producing the same "pattern".
+> Given a list of words, two "strings" are classified as "matching" if there exists a one-to-one mapping between them. Thus, the strings `FOOFOOFOO` and `BAABAABAA` are considered matching, because `F` and `B`, and `O` and `A` map to each other, producing the same "pattern".
 > 
 > Given a newline-delimited file of 500k strings, how many of them are "friendly"?
 
-INTERESTING. I spent an idle lunch hour pondering the problem:
+Setting aside for a moment the far more interesting question "What even *is* a string?", I spent a slow afternoon pondering the problem:
 
 - The strings in the file are uppercase ASCII
 - We can keep a "stack" of characters we've seen, and the order in which we've seen them
-- If the first character in each string is somehow set to `0`, and subsequent new characters increase by 1, we can trivially compare patterns.
+- If the first character in each string is somehow set to `0`, and subsequent new characters that are "seen" increase by 1, I can trivially compare two patterns to check whether they match.
 
 I write a lot of Rust these days, and I was curious to see how fast it would be, but also how much more code I'd have to write compared to the usual go-to for this kind of thing: Python. By this point, all thoughts of applying for the job had long been forgotten.
 
@@ -144,7 +144,14 @@ In theory, the final step shouldn't have been necessary, because fold should acc
 The benchmark showed ~15 ms. I had no idea whether that was slow, but I *did* know that Rust's default SipHash algorithm isn't the fastest, because it's also intended to be robust against DoS attacks. In this case, that's not a concern, so I swapped in the HashMap from the [`Fnv`](https://crates.io/crates/fnv) crate. The Fowler-Noll-Vo algorithm yields better hashing performance for small integer keys. And the benchmark?  
 `10,001 ns/iter (+/- 500)`  
 
-This yielded the following Python (2.7.x, 3.6.x) program:
+I was now ready to actually run the program. On my desktop 3.4 GHz Core i7, with a warm cache, it runs in 205 ms.
+
+## Complexity
+I was reasonably sure that the program as a whole ran in linear time: there were a few sequential passes over the input list, at most two passes over each string, a handful of hopefully constant-time HashMap operations, and a final linear-time pass over it to aggregate the result. Still, why not verify? I sliced up the input into files increasing by 5k strings each time, then ran the program on each one, timing it using `Hyperfine`. Finally, I opened a Jupyter notebook, pulled the results into a Pandas DataFrame, fitted a line using Statsmodels, and graphed the results using Matplotlib:
+
+![stats](stats.png)
+
+While I was using Python, I took the opportunity to write my comparison program:
 
     #!/usr/bin/env python
     # coding: utf-8
@@ -192,4 +199,4 @@ Python has several convenient features that make the rest of the program trivial
 - The built-in `Collections` library makes frequency-counting easy
 - Dict comprehensions make filtering on values easy.
 
-I ended up with 22 LoC, and around 7 seconds to process 500k strings. *Very* compact, but also…slow.
+I ended up with 22 LoC, and around 7 seconds to process 500k strings. *Very* compact (Rust is around 66 LoC), but nowhere near as fast (Rust is around 33x faster). Of course, there's lots of low-hanging fruit here, and I didn't even look at NumPy, so the speed comparison isn't intended to be meaningful, but I was pleasantly surprised by the length and conciseness of my Rust program – I could probably have reached for `Itertools` and cut it down even further, but there's really no need.
