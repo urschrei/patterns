@@ -4,7 +4,7 @@ Recently, I came across an ad for an interesting dev job that had a precondition
 
 > Given a list of words, two "strings" are classified as "matching" if there exists a one-to-one mapping between them. Thus, the strings `FOOFOOFOO` and `BAABAABAA` are considered matching, because `F` and `B`, and `O` and `A` map to each other, producing the same "pattern".
 > 
-> Given a newline-delimited file of 500k strings, how many of them are "friendly"?
+> Given a newline-delimited file of 500k strings, how many of them are "matching"?
 
 Setting aside for a moment the far more interesting question "What even *is* a string?", I spent a slow afternoon pondering the problem:
 
@@ -191,7 +191,7 @@ While I was using Python, I took the opportunity to write my comparison program:
             )
         print("Number of friendly strings: %s" % friendly)
 
-Python has several convenient features that make the rest of the program trivial to write:
+Python has several convenient features that make the program trivial to write:
 
 - A context manager closes the file when we finish reading from it
 - We can iterate over one line at a time, generating its pattern
