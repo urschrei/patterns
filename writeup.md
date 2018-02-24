@@ -88,7 +88,7 @@ Because the input was uppercase ASCII, I could use *bytes*. And bytes can be tra
 
 Instead of a `String`, I was now using a `Vec` as my stack, and using the `position` method on an iterator over it to check whether I'd "seen" a byte, allowing me to avoid all the `String` overhead. What about the benchmark?  
 `130 ns/iter (+/- 52)`  
-An order of magnitude speedup in what is probably the hottest code in the program. This is better. But the `usize` types continued to bother me. This is all ASCII, so I should be able to use `u8` everywhere.
+An order of magnitude speedup in what is probably the hottest code in the program. This was better. But the `usize` types continued to bother me. This is all ASCII, so I should be able to use `u8` everywhere.
 
 ### The Third Attempt
 
