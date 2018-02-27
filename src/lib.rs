@@ -83,7 +83,7 @@ mod tests {
     #[test]
     fn test_count() {
         let strings = vec![
-            "LALALA", "XOXOXO", "GCGCGCÜ", "HHHCCC", "BBBMMM", "EGONUH", "HHRGOE"
+            "LALALA", "XOXOXO", "GCGCGC", "HHHCCC", "BBBMMM", "EGONUH", "HHRGOE"
         ];
         let patterns: Vec<_> = strings
             .iter()
