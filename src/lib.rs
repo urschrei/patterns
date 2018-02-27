@@ -46,7 +46,6 @@ pub fn generate_pattern(haystack: &str) -> Vec<u8> {
         if let Some(needle) = stack.get_mut(byte as usize) {
             if *needle == 0 {
                 total += 1;
-                // stack[byte as usize] = total;
                 *needle = total;
             }
             pattern.push(*needle - 1)
