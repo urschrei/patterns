@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
 use std::path::Path;
+use std::process::exit;
 
 extern crate fnv;
 use fnv::FnvHashMap;
@@ -42,13 +43,17 @@ pub fn generate_pattern(haystack: &str) -> Vec<u8> {
         // the new total is assigned to the stack at the byte position
         // needle is set to total
         // the ("seen" value - 1) is pushed onto the pattern
-        let mut needle = stack[byte as usize];
-        if needle == 0 {
-            total += 1;
-            stack[byte as usize] = total;
-            needle = total;
+        if let Some(needle) = stack.get_mut(byte as usize) {
+            if *needle == 0 {
+                total += 1;
+                // stack[byte as usize] = total;
+                *needle = total;
+            }
+            pattern.push(*needle - 1)
+        } else {
+            println!("Got a non-uppercase ASCII character.");
+            exit(1)
         }
-        pattern.push(needle - 1)
     }
     pattern
 }
@@ -79,7 +84,7 @@ mod tests {
     #[test]
     fn test_count() {
         let strings = vec![
-            "LALALA", "XOXOXO", "GCGCGC", "HHHCCC", "BBBMMM", "EGONUH", "HHRGOE"
+            "LALALA", "XOXOXO", "GCGCGCÜ", "HHHCCC", "BBBMMM", "EGONUH", "HHRGOE"
         ];
         let patterns: Vec<_> = strings
             .iter()
