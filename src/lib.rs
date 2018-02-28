@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
 use std::path::Path;
+use std::process::exit;
 
 extern crate fnv;
 use fnv::FnvHashMap;
@@ -36,6 +37,10 @@ pub fn generate_pattern(haystack: &str) -> Vec<u8> {
     let mut pattern = Vec::with_capacity(haystack.len());
     // it's safe to use bytes here, since ASCII is one byte per character
     for &byte in haystack.as_bytes() {
+        if byte as usize > 127 {
+            println!("Got a non-uppercase ASCII character!");
+            exit(1)
+        }
         // casting u8 to usize casts from the byte to 0…127
         // if needle has a "seen" value of 0:
         // the total is bumped by 1, ensuring each new byte gets a higher number
