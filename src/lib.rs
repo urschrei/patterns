@@ -40,20 +40,21 @@ pub fn generate_pattern(haystack: &str) -> Vec<u8> {
         if byte as usize > 127 {
             println!("Got a non-uppercase ASCII character!");
             exit(1)
+        } else {
+            // casting u8 to usize casts from the byte to 0…127
+            // if needle has a "seen" value of 0:
+            // the total is bumped by 1, ensuring each new byte gets a higher number
+            // the new total is assigned to the stack at the byte position
+            // needle is set to total
+            // the ("seen" value - 1) is pushed onto the pattern
+            let mut needle = stack[byte as usize];
+            if needle == 0 {
+                total += 1;
+                stack[byte as usize] = total;
+                needle = total;
+            }
+            pattern.push(needle - 1)
         }
-        // casting u8 to usize casts from the byte to 0…127
-        // if needle has a "seen" value of 0:
-        // the total is bumped by 1, ensuring each new byte gets a higher number
-        // the new total is assigned to the stack at the byte position
-        // needle is set to total
-        // the ("seen" value - 1) is pushed onto the pattern
-        let mut needle = stack[byte as usize];
-        if needle == 0 {
-            total += 1;
-            stack[byte as usize] = total;
-            needle = total;
-        }
-        pattern.push(needle - 1)
     }
     pattern
 }
