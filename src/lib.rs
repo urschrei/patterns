@@ -43,7 +43,7 @@ pub fn generate_pattern(haystack: &str) -> Vec<u8> {
         } else {
             // casting u8 to usize casts from the byte to 0…127
             // if needle has a "seen" value of 0:
-            // the total is bumped by 1, ensuring each new byte gets a higher number
+            // the total is bumped by 1, so each new byte gets a higher number
             // the new total is assigned to the stack at the byte position
             // needle is set to total
             // the ("seen" value - 1) is pushed onto the pattern
@@ -62,7 +62,7 @@ pub fn generate_pattern(haystack: &str) -> Vec<u8> {
 /// Perform a frequency count of integer sequences
 #[inline]
 pub fn count_frequency(patterns: &[Vec<u8>]) -> u32 {
-    // Vec<u8> is hashable, so we can use a HashMap to carry out a frequency count
+    // Vec<u8> is hashable
     // The Fowler-Noll-Vo hashing function is faster when hashing integer keys
     // resistance to DoS attacks isn't a priority here
     let mut frequency: FnvHashMap<&[u8], u32> =
