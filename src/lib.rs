@@ -1,6 +1,5 @@
-use std::io::prelude::*;
-use std::io::BufReader;
 use std::fs::File;
+use std::io::prelude::*;
 use std::path::Path;
 use std::process::exit;
 
@@ -10,16 +9,16 @@ use fnv::FnvHashMap;
 extern crate rayon;
 use rayon::prelude::*;
 
-/// Attempt to open a file, read it, and parse it into a vec of Strings
-pub fn file_to_lines<P>(filename: P) -> Vec<String>
+/// Attempt to open a file, read it, and parse it into a vec of patterns
+pub fn file_to_patterns<P>(filename: P) -> Vec<Vec<u8>>
 where
     P: AsRef<Path>,
 {
-    let file = File::open(filename).expect("Could not find file");
-    let buf = BufReader::new(file);
-    buf.lines()
-        .map(|line| line.expect("Could not parse line"))
-        .collect()
+    let mut file = File::open(filename).expect("Could not find file");
+    let mut s = String::new();
+    // no need to use a BufReader since we want the entire file
+    file.read_to_string(&mut s).unwrap();
+    s.par_lines().map(|line| generate_pattern(line)).collect()
 }
 
 /// Generate a pattern of integers from a string of ASCII characters

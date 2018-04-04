@@ -1,9 +1,8 @@
 // compile using CARGO_INCREMENTAL="0" cargo build --release
 extern crate rayon;
-use rayon::prelude::*;
 
 extern crate patterns;
-use patterns::{count_frequency, file_to_lines, generate_pattern};
+use patterns::{count_frequency, file_to_patterns};
 
 #[macro_use]
 extern crate clap;
@@ -23,12 +22,8 @@ fn main() {
         )
         .get_matches();
     let input_file = value_t!(params.value_of("INPUT_STRINGS"), String).unwrap();
-    let strings = file_to_lines(&input_file);
-    // generate patterns for each string
-    let patterns = strings
-        .par_iter()
-        .map(|string| generate_pattern(string))
-        .collect::<Vec<Vec<u8>>>();
-    let friendly = count_frequency(&patterns);
+    let strings = file_to_patterns(&input_file);
+    // count "friendly" patterns
+    let friendly = count_frequency(&strings);
     println!("Number of friendly strings: {:?}", friendly);
 }
