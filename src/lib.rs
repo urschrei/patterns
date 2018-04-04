@@ -17,7 +17,7 @@ where
     let mut file = File::open(filename).expect("Could not find file");
     let mut s = String::new();
     // no need to use a BufReader since we want the entire file
-    file.read_to_string(&mut s).unwrap();
+    file.read_to_string(&mut s).expect("Couldn't read file");
     s.par_lines().map(|line| generate_pattern(line)).collect()
 }
 
