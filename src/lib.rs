@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::prelude::*;
+use std::fs;
 use std::path::Path;
 use std::process::exit;
 
@@ -14,10 +13,8 @@ pub fn file_to_patterns<P>(filename: P) -> Vec<Vec<u8>>
 where
     P: AsRef<Path>,
 {
-    let mut file = File::open(filename).expect("Could not find file");
-    let mut s = String::new();
     // no need to use a BufReader since we want the entire file
-    file.read_to_string(&mut s).expect("Couldn't read file");
+    let s = fs::read_to_string(filename).expect("Couldn't read from file");
     s.par_lines().map(|line| generate_pattern(line)).collect()
 }
 
