@@ -1,19 +1,21 @@
-#![feature(test)]
-
-extern crate test;
+use criterion::{criterion_group, criterion_main, Criterion};
 use patterns::{count_frequency, generate_pattern};
 
-#[bench]
-fn bench_pattern(b: &mut test::Bencher) {
-    let string = "LALALAXOXOXO";
-    b.iter(|| generate_pattern(&string))
+fn criterion_benchmark(c: &mut Criterion) {
+    c.bench_function("pattern generation", |bencher| {
+        let string = "LALALAXOXOXO";
+        bencher.iter(|| generate_pattern(&string));
+    });
+
+    c.bench_function("raw counts", |bencher| {
+        let v = vec![
+            vec![0, 0, 1, 0, 0],
+            vec![0, 0, 1, 0, 0, 0],
+            vec![0, 0, 1, 0, 0],
+        ];
+        bencher.iter(|| count_frequency(&v))
+    });
 }
-#[bench]
-fn bench_counts(b: &mut test::Bencher) {
-    let v = vec![
-        vec![0, 0, 1, 0, 0],
-        vec![0, 0, 1, 0, 0, 0],
-        vec![0, 0, 1, 0, 0],
-    ];
-    b.iter(|| count_frequency(&v))
-}
+
+criterion_group!(benches, criterion_benchmark);
+criterion_main!(benches);

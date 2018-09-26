@@ -1,7 +1,7 @@
 [package]
 name = "patterns"
 license = "MIT"
-version = "0.8.0"
+version = "0.8.1"
 authors = ["Stephan Hügel <urschrei@gmail.com>"]
 readme = "README.md"
 edition = "2018"
@@ -10,6 +10,9 @@ edition = "2018"
 rayon = "1.0.0"
 fnv = "1.0.6"
 clap = "2.30.0"
+
+[dev-dependencies]
+criterion = "0.2.5"
 
 [lib]
 name = "patterns"
@@ -28,3 +31,7 @@ codegen-units = 1
 [profile.bench]
 lto = true
 codegen-units = 1
+
+[[bench]]
+name = "benches"
+harness = false
