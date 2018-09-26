@@ -1,7 +1,5 @@
 // compile using CARGO_INCREMENTAL="0" cargo build --release
 
-
-
 use patterns::{count_frequency, file_to_patterns};
 
 #[macro_use]
@@ -19,8 +17,7 @@ fn main() {
                 .help("A text file containing ASCII uppercase strings, one per line")
                 .index(1)
                 .required(true),
-        )
-        .get_matches();
+        ).get_matches();
     let input_file = value_t!(params.value_of("INPUT_STRINGS"), String).unwrap();
     let strings = file_to_patterns(&input_file);
     // count "friendly" patterns

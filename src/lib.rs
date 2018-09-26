@@ -2,9 +2,7 @@ use std::fs;
 use std::path::Path;
 use std::process::exit;
 
-
 use fnv::FnvHashMap;
-
 
 use rayon::prelude::*;
 
@@ -81,7 +79,7 @@ mod tests {
     #[test]
     fn test_count() {
         let strings = vec![
-            "LALALA", "XOXOXO", "GCGCGC", "HHHCCC", "BBBMMM", "EGONUH", "HHRGOE"
+            "LALALA", "XOXOXO", "GCGCGC", "HHHCCC", "BBBMMM", "EGONUH", "HHRGOE",
         ];
         let patterns: Vec<_> = strings
             .iter()
