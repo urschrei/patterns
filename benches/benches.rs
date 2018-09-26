@@ -1,8 +1,6 @@
 #![feature(test)]
 
 extern crate test;
-
-extern crate patterns;
 use patterns::{count_frequency, generate_pattern};
 
 #[bench]

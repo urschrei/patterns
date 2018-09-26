@@ -1,7 +1,7 @@
 // compile using CARGO_INCREMENTAL="0" cargo build --release
-extern crate rayon;
 
-extern crate patterns;
+
+
 use patterns::{count_frequency, file_to_patterns};
 
 #[macro_use]

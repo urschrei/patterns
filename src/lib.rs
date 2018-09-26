@@ -2,10 +2,10 @@ use std::fs;
 use std::path::Path;
 use std::process::exit;
 
-extern crate fnv;
+
 use fnv::FnvHashMap;
 
-extern crate rayon;
+
 use rayon::prelude::*;
 
 /// Attempt to open a file, read it, and parse it into a vec of patterns
