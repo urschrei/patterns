@@ -1,10 +1,7 @@
 // compile using CARGO_INCREMENTAL="0" cargo build --release
 
 use patterns::{count_frequency, file_to_patterns};
-
-#[macro_use]
-extern crate clap;
-use clap::{App, Arg};
+use clap::{App, Arg, crate_version, value_t};
 
 fn main() {
     // Generate a CLI, and get input filename to process
