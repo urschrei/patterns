@@ -1,6 +1,6 @@
+use fnv::FnvHashMap;
 use std::fs;
 use std::path::Path;
-use fnv::FnvHashMap;
 
 use rayon::prelude::*;
 
@@ -29,7 +29,10 @@ pub fn generate_pattern(haystack: &str) -> Vec<u8> {
     let mut pattern = Vec::with_capacity(haystack.len());
     // it's safe to use bytes here, since ASCII is one byte per character
     for byte in haystack.as_bytes() {
-        assert!(*byte as usize <= 127, "Got a non-uppercase ASCII character!");
+        assert!(
+            *byte as usize <= 127,
+            "Got a non-uppercase ASCII character!"
+        );
         // casting u8 to usize casts from the byte to 0…127
         // if needle has a "seen" value of 0:
         // the total is bumped by 1, so each new byte gets a higher number
