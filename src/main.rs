@@ -6,7 +6,7 @@ use patterns::{count_frequency, file_to_patterns};
 fn main() {
     // Generate a CLI, and get input filename to process
     let params = App::new("patterns")
-        .version(&crate_version!()[..])
+        .version(crate_version!())
         .author("Stephan Hügel <urschrei@gmail.com>")
         .about("Generate a frequency count of patterns derived from ASCII strings")
         .arg(

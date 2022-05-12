@@ -5,7 +5,7 @@ Go to https://www.rustup.rs, and follow the instructions.
 If you're on Windows, see [here](https://github.com/rust-lang-nursery/rustup.rs/#other-installation-methods).
 
 Once Rust is installed:
-- open a terminal, and in a local clone of this repo, run `CARGO_INCREMENTAL="0" cargo build --release`
+- open a terminal, and in a local clone of this repo, run `cargo build --release` (`target-cpu=native` doesn't have a significant effect)
 - run `target/release/patterns words.txt`
     - if you'd prefer to use a different input corpus, specify its full path.
 
@@ -16,11 +16,11 @@ The `sha-256` hash of the text input file (`words.txt`, it's included in this re
 
 # Benchmarks
 The binary was compiled with link-time-optimisation.  
-On a 3.4 GHz Core i7:  
+On a 2.3 GHz Quad-Core Intel Core i5:  
 
 | Command | Mean [ms] | Min…Max [ms] |
 |:---|---:|---:|
-| `target/release/patterns words.txt` | 129.8 ± 1.3 | 127.5…133.3 |
+| `target/release/patterns words.txt` | 110.4 ± 1.8 | 110.1…117.8 |
 
 Optimisation details:
 Wherever possible, operations are parallelised using the [Rayon](https://github.com/rayon-rs/rayon) library, and instead of the standard hash function, a hashing function based on the [Fowler-Noll-Vo](https://github.com/servo/rust-fnv) function is used. This is considerably faster than the default SipHash function for small integer keys, but is far less resistant to DoS attacks. Functions are explicitly inlined.

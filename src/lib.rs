@@ -11,7 +11,7 @@ where
 {
     // no need to use a BufReader since we want the entire file
     let s = fs::read_to_string(filename).expect("Couldn't read from file");
-    s.par_lines().map(|line| generate_pattern(line)).collect()
+    s.par_lines().map(generate_pattern).collect()
 }
 
 /// Generate a pattern of integers from a string of ASCII characters
