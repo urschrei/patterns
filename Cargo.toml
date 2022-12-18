@@ -4,7 +4,7 @@ license = "MIT"
 version = "0.8.4"
 authors = ["Stephan Hügel <urschrei@gmail.com>"]
 readme = "README.md"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 rayon = "1.0.0"
