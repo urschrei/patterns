@@ -9,18 +9,32 @@ Once Rust is installed:
 - run `target/release/patterns words.txt`
     - if you'd prefer to use a different input corpus, specify its full path.
 
-The number you see printed out is the number of "friendly" strings, i.e. those that have at least one matching pattern, according to the rules at https://mimi.io/en/challenge/
+The number you see printed out is the number of "friendly" strings, i.e. those that have at least one matching pattern:
 
-The `sha-256` hash of the text input file (`words.txt`, it's included in this repo) is:  
+> Two words are considered “friendly” if there exists a one to one mapping of letters between the two.
+For instance…
+GAGA and BOBO are friendly because mapping G<->B and A<->O would make them the same.
+HHHH and BOBO are not friendly. Neither are JKKJ and JKKJJ.
+This list…
+LALALA
+XOXOXO
+GCGCGC
+HHHCCC
+BBBMMM
+EGONUH
+HHRGOE
+… contains 5 words that have at least one friend. How many words are there in the list with at least one friend?
+
+The `sha-256` hash of the 500k-line text input file (`words.txt`, it's included in this repo) is:  
 `aed3d37e660fe1714ccc42185ec5a0d0a3b6f17694e765a37e97fe93ee21717e`
 
 # Benchmarks
 The binary was compiled with link-time-optimisation.  
-On a 2.3 GHz Quad-Core Intel Core i5:  
+On a 2023 M2:  
 
-| Command | Mean [ms] | Min…Max [ms] |
-|:---|---:|---:|
-| `target/release/patterns words.txt` | 110.4 ± 1.8 | 110.1…117.8 |
+| Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
+|:---|---:|---:|---:|---:|
+| `target/release/patterns words.txt` | 63.4 ± 1.3 | 61.9 | 67.6 | 1.00 |
 
 Optimisation details:
 Wherever possible, operations are parallelised using the [Rayon](https://github.com/rayon-rs/rayon) library, and instead of the standard hash function, a hashing function based on the [Fowler-Noll-Vo](https://github.com/servo/rust-fnv) function is used. This is considerably faster than the default SipHash function for small integer keys, but is far less resistant to DoS attacks. Functions are explicitly inlined.
